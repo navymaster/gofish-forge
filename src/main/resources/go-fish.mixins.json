@@ -1,0 +1,23 @@
+{
+  "required": true,
+  "package": "draylar.gofish.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "FishingBobberAutosmeltMixin",
+    "FishingBobberEntityAccessor",
+    "FishingBobberEntityRendererMixin",
+    "FishingBobberExperienceMixin",
+    "FishingBobberFireproofMixin",
+    "FishingBobberLavaFishingMixin",
+    "FishingBobberLootMixin",
+    "FishingBobberValidityMixin",
+    "FishingHookPredicateMixin",
+    "FishingRodPropertyMixin",
+    "ItemEntityFireproofMixin",
+    "ParticleManagerMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

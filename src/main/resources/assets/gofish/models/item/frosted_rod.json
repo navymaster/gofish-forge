@@ -1,0 +1,14 @@
+{
+  "parent": "item/handheld_rod",
+  "textures": {
+    "layer0": "gofish:item/frosted_rod"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "cast": 1
+      },
+      "model": "gofish:item/frosted_rod_cast"
+    }
+  ]
+}
