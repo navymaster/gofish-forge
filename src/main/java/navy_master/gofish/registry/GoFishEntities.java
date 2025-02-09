@@ -22,8 +22,4 @@ public class GoFishEntities {
                             GoFishBlocks.ASTRAL_CRATE.get()
                     ).build(null)
             );
-
-    public static void register(IEventBus bus) {
-        BLOCK_ENTITIES.register(bus);
-    }
 }

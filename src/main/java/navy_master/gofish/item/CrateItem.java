@@ -1,5 +1,6 @@
 package navy_master.gofish.item;
 
+import navy_master.gofish.client.item.AstralCrateItemRenderer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -21,10 +22,12 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class CrateItem extends BlockItem {
 
@@ -88,5 +91,10 @@ public class CrateItem extends BlockItem {
                 .withStyle(ChatFormatting.GRAY)
                 .withStyle(ChatFormatting.ITALIC); // 格式化方法名改为 withStyle
         tooltip.add(text);
+    }
+
+    @Override
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+        consumer.accept(new AstralCrateItemRenderer());
     }
 }

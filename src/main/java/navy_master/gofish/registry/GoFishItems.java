@@ -2,15 +2,17 @@ package navy_master.gofish.registry;
 
 import navy_master.gofish.GoFish;
 import navy_master.gofish.api.SoundInstance;
+import navy_master.gofish.client.item.AstralCrateItemRenderer;
 import navy_master.gofish.item.*;
 import net.minecraft.ChatFormatting;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -173,6 +175,9 @@ public class GoFishItems {
         return new FoodProperties.Builder().nutrition(nutrition).saturationMod(saturation);
     }
 
+    public static final RegistryObject<Item> ASTRAL_CRATE = ITEMS.register("astral_crate", () -> new CrateItem(GoFishBlocks.ASTRAL_CRATE.get(),
+            new Item.Properties().stacksTo(8).fireResistant().rarity(Rarity.EPIC),
+            new ResourceLocation(GoFish.MOD_ID, "gameplay/fishing/astral_crate")));
 
     public static void addToCreativeTab(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {

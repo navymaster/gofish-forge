@@ -4,6 +4,7 @@ import navy_master.gofish.GoFish;
 import navy_master.gofish.block.AstralCrateBlock;
 import navy_master.gofish.block.CrateBlock;
 import navy_master.gofish.item.CrateItem;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -76,10 +77,8 @@ public class GoFishBlocks {
             props -> props.stacksTo(8).fireResistant().rarity(Rarity.UNCOMMON),
             new ResourceLocation(GoFish.MOD_ID, "gameplay/fishing/gilded_blackstone_crate"));
 
-    public static final RegistryObject<Block> ASTRAL_CRATE = registerCrate("astral_crate",
-            () -> new AstralCrateBlock(BlockBehaviour.Properties.copy(Blocks.END_STONE).noOcclusion()),
-            props -> props.stacksTo(8).fireResistant().rarity(Rarity.EPIC),
-            new ResourceLocation(GoFish.MOD_ID, "gameplay/fishing/astral_crate"));
+    public static final RegistryObject<Block> ASTRAL_CRATE = BLOCKS.register("astral_crate",
+            () -> new AstralCrateBlock(BlockBehaviour.Properties.copy(Blocks.END_STONE).noOcclusion()));
 
     public static final RegistryObject<Block> END_CRATE = registerCrate("end_crate",
             () -> new AstralCrateBlock(BlockBehaviour.Properties.copy(Blocks.END_STONE)),
@@ -93,5 +92,4 @@ public class GoFishBlocks {
         GoFishItems.ITEMS.register(name, () -> new CrateItem(blockReg.get(), itemProps.apply(new Item.Properties()), lootTableId));
         return blockReg;
     }
-
 }

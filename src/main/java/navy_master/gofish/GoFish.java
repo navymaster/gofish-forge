@@ -34,11 +34,6 @@ public class GoFish {
     public static final DeferredRegister<CreativeModeTab> TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MOD_ID);
 
-    // 物品组注册
-    /*public static final ResourceKey<CreativeModeTab> ITEM_GROUP = ResourceKey.create(
-            Registries.CREATIVE_MODE_TAB,
-            id("group")
-    );*/
 
     public GoFish() {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -48,7 +43,7 @@ public class GoFish {
         registerDeferredRegistries(modBus);
         modBus.addListener(GoFishItems::addToCreativeTab); // 添加事件监听器
         // 注册通用配置
-        //modBus.addListener(this::onCommonSetup);
+        modBus.addListener(this::onCommonSetup);
 
         // 注册命令
         //forgeBus.addListener(this::onCommandRegister);
@@ -63,8 +58,9 @@ public class GoFish {
         GoFishEnchantments.ENCHANTMENTS.register(modBus);
         GoFishItems.ITEMS.register(modBus);
         GoFishBlocks.BLOCKS.register(modBus);
-        //GoFishEntities.ENTITIES.register(modBus);
-        //GoFishParticles.PARTICLES.register(modBus);
+        GoFishEntities.BLOCK_ENTITIES.register(modBus);
+        GoFishParticles.PARTICLE_TYPES.register(modBus);
+        GoFishLoot.REGISTER.register(modBus);
     }
 
     // 注册标签页（替换原 ITEM_GROUP 声明）
@@ -80,12 +76,10 @@ public class GoFish {
                     .build()
     );
 
-    /*private void onCommonSetup(FMLCommonSetupEvent event) {
+    private void onCommonSetup(FMLCommonSetupEvent event) {
         // 酿造配方需要在同步线程执行
         event.enqueueWork(() -> {
             registerBrewingRecipes();
-            GoFishLoot.init();
-            GoFishLootHandler.init();
         });
     }
 
