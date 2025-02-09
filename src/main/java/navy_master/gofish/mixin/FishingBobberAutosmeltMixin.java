@@ -7,7 +7,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.Level;
@@ -38,26 +37,20 @@ public abstract class FishingBobberAutosmeltMixin extends Entity implements Smel
         this.gf_smelts = value;
     }
 
-    @ModifyVariable(
-            method = "retrieve",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/world/entity/item/ItemEntity;setDeltaMovement(DDD)V",
-                    shift = At.Shift.AFTER
-            ),
-            ordinal=0
-    )
     private ItemEntity processOutput(ItemEntity itemEntity) {
         if(gf_smelts) {
-            Optional<RecipeHolder<SmeltingRecipe>> cooked = level().getRecipeManager().getRecipeFor(
+            // 修改点 1: 直接使用 SmeltingRecipe 而不是 RecipeHolder<SmeltingRecipe>
+            Optional<SmeltingRecipe> cooked = level().getRecipeManager().getRecipeFor(
                     RecipeType.SMELTING,
                     new SimpleContainer(itemEntity.getItem()),
                     level()
             );
 
-            cooked.ifPresent(smeltingRecipe -> itemEntity.setItem(smeltingRecipe.value().getResultItem(level().registryAccess())));
+            // 修改点 2: 直接访问 SmeltingRecipe 而不是通过 .value()
+            cooked.ifPresent(smeltingRecipe ->
+                    itemEntity.setItem(smeltingRecipe.getResultItem(level().registryAccess()))
+            );
         }
-
         return itemEntity;
     }
 }

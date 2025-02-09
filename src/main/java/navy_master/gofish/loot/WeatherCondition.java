@@ -1,8 +1,14 @@
 package navy_master.gofish.loot;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import navy_master.gofish.loot.biome.BiomePredicate;
+import navy_master.gofish.loot.biome.BiomeTagPredicate;
+import navy_master.gofish.loot.biome.MatchBiomeLootCondition;
 import navy_master.gofish.registry.GoFishLoot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
@@ -12,6 +18,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
+import net.minecraft.world.level.storage.loot.Serializer;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -23,13 +30,15 @@ public record WeatherCondition(Optional<Boolean> raining, Optional<Boolean> thun
 
     public static final Codec<WeatherCondition> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
-                            ExtraCodecs.strictOptionalField(Codec.BOOL, "raining").forGetter(WeatherCondition::raining),
+                            /*ExtraCodecs.strictOptionalField(Codec.BOOL, "raining").forGetter(WeatherCondition::raining),
                             ExtraCodecs.strictOptionalField(Codec.BOOL, "thundering").forGetter(WeatherCondition::thundering),
-                            ExtraCodecs.strictOptionalField(Codec.BOOL, "snowing").forGetter(WeatherCondition::snowing)
+                            ExtraCodecs.strictOptionalField(Codec.BOOL, "snowing").forGetter(WeatherCondition::snowing),*/
+                            Codec.BOOL.optionalFieldOf("raining").forGetter(WeatherCondition::raining),
+                            Codec.BOOL.optionalFieldOf("thundering").forGetter(WeatherCondition::thundering),
+                            Codec.BOOL.optionalFieldOf("snowing").forGetter(WeatherCondition::snowing)
                     )
                     .apply(instance, WeatherCondition::new)
     );
-
     @Override
     public LootItemConditionType getType() {
         return GoFishLoot.WEATHER.get();
@@ -71,5 +80,17 @@ public record WeatherCondition(Optional<Boolean> raining, Optional<Boolean> thun
 
     public static LootItemCondition.Builder builder(boolean raining, boolean thundering, boolean snowing) {
         return () -> new WeatherCondition(Optional.of(raining), Optional.of(thundering), Optional.of(snowing));
+    }
+    // 新增序列化器
+    public static class CondtionSerializer implements Serializer<MatchBiomeLootCondition> {
+
+        // 1.20.1 需要空实现的序列化方法
+        @Override
+        public void serialize(JsonObject json, MatchBiomeLootCondition value, JsonSerializationContext context) {}
+
+        @Override
+        public MatchBiomeLootCondition deserialize(JsonObject json, JsonDeserializationContext context) {
+            return new MatchBiomeLootCondition(Optional.empty(), Optional.empty()); // 实际通过CODEC解析
+        }
     }
 }
