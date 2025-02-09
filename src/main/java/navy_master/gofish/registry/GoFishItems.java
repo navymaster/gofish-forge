@@ -2,7 +2,6 @@ package navy_master.gofish.registry;
 
 import navy_master.gofish.GoFish;
 import navy_master.gofish.api.SoundInstance;
-import navy_master.gofish.client.item.AstralCrateItemRenderer;
 import navy_master.gofish.item.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.resources.ResourceLocation;
@@ -11,7 +10,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -20,7 +18,7 @@ import net.minecraftforge.registries.RegistryObject;
 public class GoFishItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, GoFish.MOD_ID);
 
-    // Fishing Rods
+    // 钓竿
     public static final RegistryObject<Item> BLAZE_ROD = ITEMS.register("blaze_rod", ()->new   ExtendedFishingRodItem.Builder()
             .durability(125)
             .autosmelt()
@@ -74,7 +72,7 @@ public class GoFishItems {
             .tooltipLines(1)
             .nightLuck()
             .build());
-    // Fish Items
+    // 鱼
     public static final RegistryObject<Item> ENDER_EEL = ITEMS.register("ender_eel", ()->new Item(props().food(food(2, 0).build())));
     public static final RegistryObject<Item> ICICLE_FISH = ITEMS.register("icicle_fish", ()->new Item(props().food(
             food(2, 0).effect(() -> new MobEffectInstance(MobEffects.HARM, 1, 0), 1.0f).build()
@@ -96,7 +94,7 @@ public class GoFishItems {
             food(2, 0).effect(() -> new MobEffectInstance(MobEffects.BLINDNESS, 100, 0), 1.0f).build()
     )));
 
-    // Nether Items
+    // 下界
     public static final RegistryObject<Item> SPIKERFISH = ITEMS.register("spikerfish", ()->new Item(props().fireResistant()));
     public static final RegistryObject<Item> BLACKSTONE_TROUT = ITEMS.register("blackstone_trout", ()->new Item(props()
             .food(food(4, 0.75f).build())
@@ -124,7 +122,7 @@ public class GoFishItems {
             .food(food(4, 0.25f).build())
             .fireResistant()));
 
-    // End Items
+    // 末地
     public static final RegistryObject<Item> ENDFISH = ITEMS.register("endfish", ()->new Item(props().food(food(2, 0).build())));
     public static final RegistryObject<Item> BAKED_ENDFISH = ITEMS.register("baked_endfish",
             ()->new TooltippedItem(props().food(food(6, 0.8f).build()), 2));
@@ -139,7 +137,7 @@ public class GoFishItems {
     public static final RegistryObject<Item> PORTAL_PUFFER = ITEMS.register("portal_puffer",
             ()->new Item(props().food(food(4, 0).build()).rarity(Rarity.EPIC)));
 
-    // Moon Fish
+    // 满月渔获
     public static final RegistryObject<Item> LUNARFISH = ITEMS.register("lunarfish", ()->new Item(props().food(food(2, 0).build())));
     public static final RegistryObject<Item> GALAXY_STARFISH = ITEMS.register("galaxy_starfish", ()->new Item(props().food(food(2, 0).build())));
     public static final RegistryObject<Item> STARRY_SALMON = ITEMS.register("starry_salmon", ()->new Item(props().food(food(2, 0).build())));
@@ -147,7 +145,7 @@ public class GoFishItems {
     public static final RegistryObject<Item> AQUATIC_ASTRAL_STEW = ITEMS.register("aquatic_astral_stew",
             ()->new TooltippedItem(props().food(food(9, 0.75f).build()), 3));
 
-    // Weather Fish
+    // 特定天气渔获
     public static final RegistryObject<Item> RAINY_BASS = ITEMS.register("rainy_bass", ()->new Item(props().food(food(3, 0.5f).build())));
     public static final RegistryObject<Item> STEAMED_BASS = ITEMS.register("steamed_bass",
             ()->new TooltippedItem(props().food(food(6, 0.25f).build()), 2));
@@ -157,7 +155,7 @@ public class GoFishItems {
     public static final RegistryObject<Item> SMOKED_CLOUDY_CRAB = ITEMS.register("smoked_cloudy_crab", ()->new Item(props().food(food(7, 0.25f).build())));
     public static final RegistryObject<Item> BLIZZARD_BASS = ITEMS.register("blizzard_bass", ()->new Item(props().food(food(3, 0.5f).build())));
 
-    // Accessories
+    // 杂项
     public static final RegistryObject<Item> GOLDEN_FISH = ITEMS.register("golden_fish",
             ()->new LureItem(props().stacksTo(1).rarity(Rarity.EPIC), 1));
     public static final RegistryObject<Item> SIMPLE_LURE = ITEMS.register("simple_lure",
@@ -165,8 +163,6 @@ public class GoFishItems {
     public static final RegistryObject<Item> SOUL_LURE = ITEMS.register("soul_lure",
             ()->new SoulLureItem(props().stacksTo(1)));
 
-
-    // Helper Methods
     private static Item.Properties props() {
         return new Item.Properties();
     }
@@ -174,11 +170,12 @@ public class GoFishItems {
     private static FoodProperties.Builder food(int nutrition, float saturation) {
         return new FoodProperties.Builder().nutrition(nutrition).saturationMod(saturation);
     }
-
+    //星体箱需要额外做渲染，所以单独提出来注册
     public static final RegistryObject<Item> ASTRAL_CRATE = ITEMS.register("astral_crate", () -> new CrateItem(GoFishBlocks.ASTRAL_CRATE.get(),
             new Item.Properties().stacksTo(8).fireResistant().rarity(Rarity.EPIC),
             new ResourceLocation(GoFish.MOD_ID, "gameplay/fishing/astral_crate")));
 
+    //添加到创造模式物品栏
     public static void addToCreativeTab(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             ITEMS.getEntries().stream()

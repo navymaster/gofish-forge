@@ -6,7 +6,6 @@ import navy_master.gofish.registry.GoFishBlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
@@ -39,6 +38,7 @@ public class AstralCrateItemRenderer implements IClientItemExtensions {
             BlockEntityRenderer<AstralCrateBlockEntity> renderer = blockEntityDispatcher.getRenderer(astralCrate);
 
             // 渲染方块本体
+            // TODO::IDE提示采用了过时的实现
             blockRenderer.renderSingleBlock(
                     astralCrate.getBlockState(),
                     poseStack,

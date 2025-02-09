@@ -20,7 +20,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.tags.TagKey;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -30,6 +29,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+//岩浆钓鱼效果实现
 @Mixin(FishingHook.class)
 public abstract class FishingBobberLavaFishingMixin extends Entity {
 
@@ -90,7 +90,7 @@ public abstract class FishingBobberLavaFishingMixin extends Entity {
     private boolean fallOutsideLiquid(FluidState fluid, TagKey<Fluid> tag) {
         return !fluid.isEmpty();
     }
-    // 修正后的第一个注入点（注意参数顺序变化）
+    
     @Inject(
             method = "catchingFish",
             at = @At(
@@ -126,7 +126,6 @@ public abstract class FishingBobberLavaFishingMixin extends Entity {
         serverLevel.sendParticles(GoFishParticles.LAVA_FISHING.get(), x, y, z, 0, -dX, 0.01D, dZ, 1.0D);
     }
 
-    // 修正后的第二个注入点
     @Inject(
             method = "catchingFish",
             at = @At(
@@ -155,9 +154,8 @@ public abstract class FishingBobberLavaFishingMixin extends Entity {
         }
     }
 
-    // 修正后的重定向点（使用SRG名确保匹配）
     @Redirect(
-            method = "getOpenWaterTypeForBlock", // 实际检查单个方块的方法
+            method = "getOpenWaterTypeForBlock", 
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/world/level/material/FluidState;is(Lnet/minecraft/tags/TagKey;)Z"

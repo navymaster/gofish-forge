@@ -1,8 +1,6 @@
 package navy_master.gofish.mixin;
 
-import navy_master.gofish.registry.GoFishParticles;
 import net.minecraft.client.particle.ParticleEngine;
-import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.WaterDropParticle;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;

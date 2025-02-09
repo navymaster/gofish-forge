@@ -1,10 +1,8 @@
 package navy_master.gofish;
 
-//import navy_master.gofish.command.FishCommand;
 import navy_master.gofish.registry.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -13,7 +11,6 @@ import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.brewing.BrewingRecipe;
-import net.minecraftforge.common.brewing.IBrewingRecipe;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
@@ -45,16 +42,11 @@ public class GoFish {
         // 注册通用配置
         modBus.addListener(this::onCommonSetup);
 
-        // 注册命令
-        //forgeBus.addListener(this::onCommandRegister);
-
         // 注册燃料事件
         forgeBus.addListener(this::onFuelBurnTime);
     }
 
     private void registerDeferredRegistries(IEventBus modBus) {
-        // 初始化所有注册类（需要提前修改为使用DeferredRegister）
-
         GoFishEnchantments.ENCHANTMENTS.register(modBus);
         GoFishItems.ITEMS.register(modBus);
         GoFishBlocks.BLOCKS.register(modBus);
@@ -63,7 +55,7 @@ public class GoFish {
         GoFishLoot.REGISTER.register(modBus);
     }
 
-    // 注册标签页（替换原 ITEM_GROUP 声明）
+    // 注册标签页
     public static final RegistryObject<CreativeModeTab> ITEM_GROUP = TABS.register("group",
             () -> CreativeModeTab.builder()
                     .icon(() -> new ItemStack(GoFishItems.GOLDEN_FISH.get()))
@@ -77,15 +69,11 @@ public class GoFish {
     );
 
     private void onCommonSetup(FMLCommonSetupEvent event) {
-        // 酿造配方需要在同步线程执行
+        // 酿造配方
         event.enqueueWork(() -> {
             registerBrewingRecipes();
         });
     }
-
-    /*private void onCommandRegister(RegisterCommandsEvent event) {
-        FishCommand.register(event.getDispatcher());
-    }*/
 
     private void onFuelBurnTime(FurnaceFuelBurnTimeEvent event) {
         ItemStack stack = event.getItemStack();
@@ -100,30 +88,30 @@ public class GoFish {
     public static void registerBrewingRecipes() {
         BrewingRecipeRegistry.addRecipe(
                 new BrewingRecipe(
-                        Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.AWKWARD)), // 输入药水
-                        Ingredient.of(GoFishItems.CLOUDY_CRAB.get().getDefaultInstance()),                  // 酿造材料
-                        PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.SLOW_FALLING) // 输出药水
+                        Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.AWKWARD)), 
+                        Ingredient.of(GoFishItems.CLOUDY_CRAB.get().getDefaultInstance()),
+                        PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.SLOW_FALLING)
                 )
         );
         BrewingRecipeRegistry.addRecipe(
                 new BrewingRecipe(
-                        Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.AWKWARD)), // 输入药水
-                        Ingredient.of(GoFishItems.CHARFISH.get().getDefaultInstance()),                  // 酿造材料
-                        PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WEAKNESS) // 输出药水
+                        Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.AWKWARD)),
+                        Ingredient.of(GoFishItems.CHARFISH.get().getDefaultInstance()),
+                        PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WEAKNESS)
                 )
         );
         BrewingRecipeRegistry.addRecipe(
                 new BrewingRecipe(
-                        Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.AWKWARD)), // 输入药水
-                        Ingredient.of(GoFishItems.RAINY_BASS.get().getDefaultInstance()),                  // 酿造材料
-                        PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER_BREATHING) // 输出药水
+                        Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.AWKWARD)),
+                        Ingredient.of(GoFishItems.RAINY_BASS.get().getDefaultInstance()),
+                        PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER_BREATHING)
                 )
         );
         BrewingRecipeRegistry.addRecipe(
                 new BrewingRecipe(
-                        Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.AWKWARD)), // 输入药水
-                        Ingredient.of(GoFishItems.MAGMA_COD.get().getDefaultInstance()),                  // 酿造材料
-                        PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.FIRE_RESISTANCE) // 输出药水
+                        Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.AWKWARD)),
+                        Ingredient.of(GoFishItems.MAGMA_COD.get().getDefaultInstance()),
+                        PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.FIRE_RESISTANCE)
                 )
         );
     }

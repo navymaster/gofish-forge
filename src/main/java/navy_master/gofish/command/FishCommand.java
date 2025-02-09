@@ -45,13 +45,11 @@ public class FishCommand {
         ServerPlayer player = source.getPlayerOrException();
         ServerLevel level = source.getLevel();
 
-        // 使用LootParams构建参数
         LootParams.Builder paramsBuilder = new LootParams.Builder(level)
                 .withParameter(LootContextParams.ORIGIN, player.position())
                 .withParameter(LootContextParams.TOOL, player.getMainHandItem())
                 .withOptionalParameter(LootContextParams.THIS_ENTITY, player);
 
-        // 创建指定类型的LootParams
         LootParams params = paramsBuilder.create(LootContextParamSets.FISHING);
 
         LootTable table;

@@ -9,9 +9,7 @@ import navy_master.gofish.loot.moon.FullMoonCondition;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryObject;
 import net.minecraft.world.level.storage.loot.Serializer;
 
@@ -21,7 +19,6 @@ public class GoFishLoot {
     public static final DeferredRegister<LootItemConditionType> REGISTER =
             DeferredRegister.create(Registries.LOOT_CONDITION_TYPE, GoFish.MOD_ID);
 
-    // 修改为使用 BaseSerializer
     public static final Supplier<LootItemConditionType> MATCH_BIOME =
             register("match_biome", new MatchBiomeLootCondition.CondtionSerializer());
     public static final Supplier<LootItemConditionType> FULL_MOON =
