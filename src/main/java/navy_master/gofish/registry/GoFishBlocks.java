@@ -4,17 +4,12 @@ import navy_master.gofish.GoFish;
 import navy_master.gofish.block.AstralCrateBlock;
 import navy_master.gofish.block.CrateBlock;
 import navy_master.gofish.item.CrateItem;
-import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -26,7 +21,7 @@ public class GoFishBlocks {
 
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, GoFish.MOD_ID);
 
-    // Crate Registrations
+    // 注册战利品箱
     public static final RegistryObject<Block> WOODEN_CRATE = registerCrate("wooden_crate",
             () -> new CrateBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WOOD)),
             props -> props.stacksTo(8),
@@ -77,14 +72,12 @@ public class GoFishBlocks {
             props -> props.stacksTo(8).fireResistant().rarity(Rarity.UNCOMMON),
             new ResourceLocation(GoFish.MOD_ID, "gameplay/fishing/gilded_blackstone_crate"));
 
-    public static final RegistryObject<Block> ASTRAL_CRATE = BLOCKS.register("astral_crate",
-            () -> new AstralCrateBlock(BlockBehaviour.Properties.copy(Blocks.END_STONE).noOcclusion()));
-
     public static final RegistryObject<Block> END_CRATE = registerCrate("end_crate",
             () -> new AstralCrateBlock(BlockBehaviour.Properties.copy(Blocks.END_STONE)),
             props -> props.stacksTo(8).fireResistant().rarity(Rarity.EPIC),
             new ResourceLocation(GoFish.MOD_ID, "gameplay/fishing/end_crate"));
 
+    //同时注册方块和物品
     private static RegistryObject<Block> registerCrate(String name, Supplier<Block> blockSupplier,
                                                        UnaryOperator<Item.Properties> itemProps,
                                                        ResourceLocation lootTableId) {
@@ -92,4 +85,8 @@ public class GoFishBlocks {
         GoFishItems.ITEMS.register(name, () -> new CrateItem(blockReg.get(), itemProps.apply(new Item.Properties()), lootTableId));
         return blockReg;
     }
+
+    //星体箱需要额外做渲染，所以单独提出来注册
+    public static final RegistryObject<Block> ASTRAL_CRATE = BLOCKS.register("astral_crate",
+            () -> new AstralCrateBlock(BlockBehaviour.Properties.copy(Blocks.END_STONE).noOcclusion()));
 }

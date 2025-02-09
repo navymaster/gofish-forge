@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+// 为特定型号钓竿提供不会着火
 @Mixin(FishingHook.class)
 public abstract class FishingBobberFireproofMixin extends Entity implements FireproofEntity {
 

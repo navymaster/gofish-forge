@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 import java.util.Optional;
 
+// 钓鱼时自动熔炼附魔类
 @Mixin(FishingHook.class)
 public abstract class FishingBobberAutosmeltMixin extends Entity implements SmeltingBobber {
 
@@ -48,6 +49,7 @@ public abstract class FishingBobberAutosmeltMixin extends Entity implements Smel
             ordinal=0
     )
     private ItemEntity processOutput(ItemEntity itemEntity) {
+        // 注入检测到钓竿具有深度烧烤时获取配方进行熔炼
         if(gf_smelts) {
             Optional<RecipeHolder<SmeltingRecipe>> cooked = level().getRecipeManager().getRecipeFor(
                     RecipeType.SMELTING,

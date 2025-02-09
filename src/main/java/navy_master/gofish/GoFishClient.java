@@ -1,32 +1,30 @@
 package navy_master.gofish;
 
 import navy_master.gofish.client.be.AstralCrateRenderer;
-import navy_master.gofish.client.item.AstralCrateItemRenderer;
 import navy_master.gofish.registry.GoFishBlocks;
 import navy_master.gofish.registry.GoFishEntities;
 import navy_master.gofish.registry.GoFishItems;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.FishingRodItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
+//客户端类，主要作用是渲染星体箱的效果
 @Mod.EventBusSubscriber(modid = "gofish", bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class GoFishClient {
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
-        // 设置渲染层（1.20.2正确方式）
+        // 设置渲染层
+        // TODO::IDE提示这里是一个过时的实现
         event.enqueueWork(() -> {
             ItemBlockRenderTypes.setRenderLayer(GoFishBlocks.ASTRAL_CRATE.get(), RenderType.cutout());
         });
@@ -62,7 +60,7 @@ public class GoFishClient {
     }
 
     private static void registerFishingRodPredicates(Item item) {
-        // 正确使用Forge的ItemProperties注册模型谓词
+        // 使用Forge的ItemProperties注册模型谓词
         ItemProperties.register(
                 item,
                 new ResourceLocation("cast"),

@@ -14,7 +14,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -25,7 +24,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -33,7 +31,6 @@ public class CrateItem extends BlockItem {
 
     private final ResourceLocation loot;
 
-    // Forge 的构造函数需要 Properties 而非 Settings
     public CrateItem(Block block, Properties properties) {
         super(block, properties);
         this.loot = new ResourceLocation("minecraft", "chests/pillager_outpost");
@@ -45,9 +42,9 @@ public class CrateItem extends BlockItem {
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext context) { // 方法名改为 useOn
+    public InteractionResult useOn(UseOnContext context) { 
         Player player = context.getPlayer();
-        if (player != null && player.isShiftKeyDown()) { // Forge 使用 isShiftKeyDown 判断潜行
+        if (player != null && player.isShiftKeyDown()) { 
             return InteractionResult.FAIL;
         }
         return super.useOn(context);
@@ -56,7 +53,7 @@ public class CrateItem extends BlockItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (player.isShiftKeyDown()) {
-            if (!level.isClientSide()) { // Forge 的 isClientSide 代替 isClient
+            if (!level.isClientSide()) {
                 ServerLevel serverLevel = (ServerLevel) level;
                 getDrops(serverLevel, loot, player.position()).forEach(stack -> {
                     Containers.dropItemStack(level, player.getX(), player.getY(), player.getZ(), stack); // Forge 的物品掉落方法
@@ -64,7 +61,7 @@ public class CrateItem extends BlockItem {
             }
 
             if (!player.isCreative()) {
-                player.getItemInHand(hand).shrink(1); // shrink 代替 decrement
+                player.getItemInHand(hand).shrink(1);
             }
 
             return InteractionResultHolder.success(player.getItemInHand(hand));
@@ -74,22 +71,21 @@ public class CrateItem extends BlockItem {
     }
 
     private List<ItemStack> getDrops(ServerLevel level, ResourceLocation identifier, Vec3 pos) {
-        // 构建 LootParams
         LootParams.Builder paramsBuilder = new LootParams.Builder(level)
                 .withParameter(LootContextParams.ORIGIN, pos)
-                .withParameter(LootContextParams.THIS_ENTITY, level.getRandom().nextBoolean() ? null : level.getRandomPlayer()); // Forge 需要至少一个实体参数
+                .withParameter(LootContextParams.THIS_ENTITY, level.getRandom().nextBoolean() ? null : level.getRandomPlayer());
 
         LootTable lootTable = level.getServer().getLootData().getLootTable(identifier);
         return lootTable.getRandomItems(paramsBuilder.create(LootContextParamSets.CHEST)); // 正确参数类型
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT) // Forge 的客户端注解
+    @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
         MutableComponent text = Component.translatable("gofish.crate_tooltip")
                 .withStyle(ChatFormatting.GRAY)
-                .withStyle(ChatFormatting.ITALIC); // 格式化方法名改为 withStyle
+                .withStyle(ChatFormatting.ITALIC);
         tooltip.add(text);
     }
 
