@@ -90,51 +90,80 @@ public abstract class FishingBobberLavaFishingMixin extends Entity {
     private boolean fallOutsideLiquid(FluidState fluid, TagKey<Fluid> tag) {
         return !fluid.isEmpty();
     }
-/*
+    // 修正后的第一个注入点（注意参数顺序变化）
     @Inject(
             method = "catchingFish",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/world/level/block/Block;)Z", ordinal = 0),
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/world/level/block/Block;)Z",
+                    ordinal = 0
+            ),
             locals = LocalCapture.CAPTURE_FAILHARD
     )
-    private void fishingLavaParticles(BlockPos pos, CallbackInfo ci, ServerLevel serverWorld, int i, float f, float g, float h, double d, double e, double j, BlockState blockState) {
-        if (!blockState.is(Blocks.LAVA)) {
-            return;
-        }
+    private void fishingLavaParticles(
+            BlockPos pos,
+            CallbackInfo ci,
+            ServerLevel serverLevel,
+            int waitTime,        // 第一个int参数
+            BlockPos checkedPos, // 实际是BlockPos而非第二个int参数
+            float deltaX,
+            float deltaY,
+            float deltaZ,
+            double x,
+            double y,
+            double z,
+            BlockState state
+    ) {
+        if (!state.is(Blocks.LAVA)) return;
+
         if (this.random.nextFloat() < 0.15F) {
-            serverWorld.sendParticles(ParticleTypes.LAVA, d, e - 0.1D, j, 1, g, 0.1D, h, 0.0D);
+            serverLevel.sendParticles(ParticleTypes.LAVA, x, y - 0.1D, z, 1, deltaX, 0.1D, deltaZ, 0.0D);
         }
 
-        float dZ = f * 0.04F;
-        float dX = h * 0.04F;
-        serverWorld.sendParticles(GoFishParticles.LAVA_FISHING.get(), d, e, j, 0, dX, 0.01D, (-dZ), 1.0D);
-        serverWorld.sendParticles(GoFishParticles.LAVA_FISHING.get(), d, e, j, 0, (-dX), 0.01D, dZ, 1.0D);
+        float dZ = deltaX * 0.04F;
+        float dX = deltaZ * 0.04F;
+        serverLevel.sendParticles(GoFishParticles.LAVA_FISHING.get(), x, y, z, 0, dX, 0.01D, -dZ, 1.0D);
+        serverLevel.sendParticles(GoFishParticles.LAVA_FISHING.get(), x, y, z, 0, -dX, 0.01D, dZ, 1.0D);
     }
 
+    // 修正后的第二个注入点
     @Inject(
             method = "catchingFish",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/world/level/block/Block;)Z", ordinal = 1),
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/world/level/block/Block;)Z",
+                    ordinal = 1
+            ),
             locals = LocalCapture.CAPTURE_FAILHARD
     )
-    private void fishSecondaryLavaParticles(BlockPos pos, CallbackInfo ci, ServerLevel serverWorld, int i, float f, float g, float h, double d, double e, double j, BlockState blockState) {
-        if (blockState.is(Blocks.LAVA)) {
-            serverWorld.sendParticles(ParticleTypes.LAVA, pos.getX(), pos.getY(), pos.getZ(), 2 + this.random.nextInt(2), 0.10000000149011612D, 0.0D, 0.10000000149011612D, 0.0D);
+    private void fishSecondaryLavaParticles(
+            BlockPos pos,
+            CallbackInfo ci,
+            ServerLevel serverLevel,
+            int waitTime,
+            BlockPos checkedPos,
+            float deltaX,
+            float deltaY,
+            float deltaZ,
+            double x,
+            double y,
+            double z,
+            BlockState state
+    ) {
+        if (state.is(Blocks.LAVA)) {
+            serverLevel.sendParticles(ParticleTypes.LAVA, checkedPos.getX(), checkedPos.getY(), checkedPos.getZ(), 2 + this.random.nextInt(2), 0.1D, 0.0D, 0.1D, 0.0D);
         }
     }
-*/
-/*
+
+    // 修正后的重定向点（使用SRG名确保匹配）
     @Redirect(
-            method = "getOpenWaterTypeForArea(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/entity/projectile/FishingHook$OpenWaterType;",
+            method = "getOpenWaterTypeForBlock", // 实际检查单个方块的方法
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/world/level/material/FluidState;is(Lnet/minecraft/tags/TagKey;)Z"
             )
     )
     private boolean isInValidLiquid(FluidState fluidState, TagKey<Fluid> tag) {
-        // 保持原始逻辑：当检查水标签时保留原逻辑，其他情况返回流体是否非空
-        if (tag == FluidTags.WATER) {
-            return fluidState.is(tag); // 保留原版水检查逻辑
-        }
-        return !fluidState.isEmpty(); // 非水检查时返回流体存在性
+        return !fluidState.isEmpty();
     }
-*/
 }

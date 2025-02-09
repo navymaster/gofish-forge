@@ -9,6 +9,7 @@
     "FishingBobberExperienceMixin",
     "FishingBobberFireproofMixin",
     "FishingBobberLavaFishingMixin",
+    "FishingBobberLootMixin",
     "FishingBobberValidityMixin",
     "FishingHookPredicateMixin",
     "ItemEntityFireproofMixin"
