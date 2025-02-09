@@ -3,7 +3,7 @@ plugins {
     id 'idea'
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
-    //id 'org.spongepowered.mixin' version '0.7.+'
+    id 'org.spongepowered.mixin' version '0.7.+'
 }
 
 version = mod_version
@@ -85,15 +85,15 @@ minecraft {
         client {
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', mod_id
-            //property 'mixin.env.disableRefMap', 'false'
-            //arg '-mixin.config=go-fish.mixins.json'
+            property 'mixin.env.disableRefMap', 'false'
+            arg '-mixin.config=go-fish.mixins.json'
         }
 
         server {
             property 'forge.enabledGameTestNamespaces', mod_id
             property 'mixin.env.disableRefMap', 'false'
-            //arg '-mixin.config=go-fish.mixins.json'
-            //args '--nogui'
+            arg '-mixin.config=go-fish.mixins.json'
+            args '--nogui'
         }
 
         // This run config launches GameTestServer and runs all registered gametests, then exits.
@@ -134,7 +134,7 @@ dependencies {
     // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    // annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
@@ -207,11 +207,11 @@ publishing {
     }
 }
 
-/*mixin {
+mixin {
     add sourceSets.main, "go-fish.mixins.refmap.json"  // refmap名称需与配置文件一致
     config "go-fish.mixins.json"                       // Mixin配置文件名称
     debug.verbose = true                           // 开发时启用调试输出
-}*/
+}
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
