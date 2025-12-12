@@ -21,18 +21,12 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
 public record MatchBiomeLootCondition(Optional<BiomeTagPredicate> category, Optional<BiomePredicate> biome) implements LootItemCondition {
 
-    /*public static final Codec<MatchBiomeLootCondition> CODEC = RecordCodecBuilder.create(
-            instance -> instance.group(
-                            ExtraCodecs.strictOptionalField(BiomeTagPredicate.CODEC, "category").forGetter(MatchBiomeLootCondition::category),
-                            ExtraCodecs.strictOptionalField(BiomePredicate.CODEC, "biome").forGetter(MatchBiomeLootCondition::biome)
-                    )
-                    .apply(instance, MatchBiomeLootCondition::new)
-    );*/
     public static final Codec<MatchBiomeLootCondition> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                             // 修改点 1: 使用基础 optionalField 方法
@@ -111,13 +105,30 @@ public record MatchBiomeLootCondition(Optional<BiomeTagPredicate> category, Opti
     }
     public static class CondtionSerializer implements Serializer<MatchBiomeLootCondition> {
 
-        // 1.20.1 需要空实现的序列化方法
         @Override
-        public void serialize(JsonObject json, MatchBiomeLootCondition value, JsonSerializationContext context) {}
+        public void serialize(JsonObject jsonObject, MatchBiomeLootCondition condition, JsonSerializationContext context) {
+            jsonObject.add("category", condition.category.get().toJson());
+            jsonObject.add("biome", condition.biome.get().toJson());
+        }
 
         @Override
-        public MatchBiomeLootCondition deserialize(JsonObject json, JsonDeserializationContext context) {
-            return new MatchBiomeLootCondition(Optional.empty(), Optional.empty()); // 实际通过CODEC解析
+        public @NotNull MatchBiomeLootCondition deserialize(JsonObject obj, JsonDeserializationContext context) {
+            BiomeTagPredicate categoryPredicate;
+            BiomePredicate biomePredicate;
+
+            if (obj.has("category")) {
+                categoryPredicate = BiomeTagPredicate.fromJson(obj.get("category"));
+            } else {
+                categoryPredicate = BiomeTagPredicate.EMPTY;
+            }
+
+            if (obj.has("biome")) {
+                biomePredicate = BiomePredicate.fromJson(obj.get("biome"));
+            } else {
+                biomePredicate = BiomePredicate.EMPTY;
+            }
+
+            return new MatchBiomeLootCondition(Optional.ofNullable(categoryPredicate), Optional.ofNullable(biomePredicate));
         }
     }
 }
