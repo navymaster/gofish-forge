@@ -1,5 +1,6 @@
 package navy_master.gofish.enchantment;
 
+import navy_master.gofish.GoFish;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
@@ -9,7 +10,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class DeepfryEnchantment extends Enchantment {
     public static final DeferredRegister<Enchantment> ENCHANTMENTS =
-            DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, "your_mod_id");
+            DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, GoFish.MOD_ID);
 
     public static final RegistryObject<Enchantment> DEEPFRY =
             ENCHANTMENTS.register("deepfry", DeepfryEnchantment::new);
